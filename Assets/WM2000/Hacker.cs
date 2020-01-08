@@ -7,10 +7,11 @@ public class Hacker : MonoBehaviour
 {
     // game variables
     string[] Level1Passwords =  {"copper", "stickemup", "lethalweapon", "policeacademy"};
-    string[] Level2Passwords =  {"cia", "pentagon", "bigstick", "communistas"};
+    string[] Level2Passwords =  {"cia", "pentagon", "bigstick", "communistas", "jackryan"};
 
     // gamestate
     int level;
+    int index;
     enum Screen { MainMenu, Password, Win}
     Screen currentScreen;
     string password;
@@ -47,14 +48,10 @@ public class Hacker : MonoBehaviour
 	}
 
     void RunMainMenu(string input) {
-        if (input == "1"){
-		    level = 1;
-            password = Level1Passwords[2]; // TODO: make random
-            GameStart ();
-        } else if (input == "2") {
-            level = 2;
-            password = Level2Passwords[3]; // TODO: make random
-            GameStart ();
+        bool ValidPass = (input == "1" || input == "2");
+        if (ValidPass) {
+            level = int.Parse(input); // no longer need to manually assign level
+            GameStart();
         } else {
             Terminal.WriteLine("Compooter no compoot. Choose 1 or 2 or 'menu'.");
         }
@@ -62,8 +59,23 @@ public class Hacker : MonoBehaviour
 
     void GameStart () {
         currentScreen = Screen.Password;
-        Terminal.WriteLine("You choose number " + level);
-        Terminal.WriteLine("Password:");
+        Terminal.ClearScreen();
+        switch (level) {
+            case 1:
+                index = UnityEngine.Random.Range(0,Level1Passwords.Length);
+                password = Level1Passwords[index];
+                // could also do:
+                // password = Level1Passwords[UnityEngine.Random.Range(0,Level1Passwords.Length)];
+                break;
+            case 2:
+                index = UnityEngine.Random.Range(0,Level2Passwords.Length);
+                password = Level2Passwords[index];
+                break;
+            default:
+                Debug.LogError("Invalid Level Number");
+                break;
+        }
+        Terminal.WriteLine("Plz enter passward:");
     }
 
 
